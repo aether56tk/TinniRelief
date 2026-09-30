@@ -1,0 +1,22 @@
+# TinniRelief
+
+Browser-based tinnitus management and sound rehabilitation platform.
+
+## Features
+- Environmental, nature, everyday, noise, tone, relaxation and sleep sound library
+- Real-time browser audio generated with the Web Audio API
+- Four-layer soundscape mixer
+- Saved personalized soundscapes using local browser storage
+- Guided management sessions with timers
+- Sleep/wind-down support
+- Tinnitus diary with intensity, annoyance, sleep and stress tracking
+- Progress dashboard
+- Responsive desktop/mobile interface
+- No PTA or audiogram module
+- No external audio API required for the initial release
+
+## Run
+Open index.html in a modern browser, or deploy the repository to GitHub Pages.
+
+## Safety
+TinniRelief is a tinnitus management/support software project. It does not diagnose, cure, or replace assessment or treatment by a qualified healthcare professional. Listening levels should remain comfortable. Sudden hearing loss, pulsatile tinnitus, significant unilateral symptoms, neurological symptoms, or other concerning changes warrant appropriate medical evaluation.
