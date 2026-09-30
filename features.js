@@ -9,7 +9,8 @@ const presets=[
 {name:"Café Background",layers:["cafe","rain"],desc:"Café + rain"}
 ];
 function presetUI(){const el=$("#presetList");if(!el)return;el.innerHTML=presets.map((p,i)=>'<button data-preset="'+i+'"><span>♫ '+p.name+'</span><small>'+p.desc+'</small></button>').join("")}
-function loadPreset(p){[...activeNodes.keys()].forEach(stopSound);p.layers.forEach(id=>playSound(id));showPage("mixer");toast(p.name+" loaded")}
+function loadPreset(p){if(master&&master.gain.value===0)master.gain.value=.35;[...activeNodes.keys()].forEach(stopSound);p.layers.forEach(id=>playSound(id));showPage("mixer");toast(p.name+" loaded")}
+$("#playerPlay")?.addEventListener("click",()=>{if(!master||!activeNodes.size)return;if(master.gain.value>0){master.gain.value=0;$("#playerPlay").textContent="▶"}else{master.gain.value=$("#safeVolume")?.checked?.5:.35;$("#playerPlay").textContent="❚❚"}});
 document.addEventListener("click",e=>{
  const p=e.target.closest("[data-preset]");if(p){loadPreset(presets[+p.dataset.preset]);return}
  const st=e.target.closest("[data-sleep]");if(st){setSleep(+st.dataset.sleep);return}
