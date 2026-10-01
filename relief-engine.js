@@ -80,6 +80,19 @@
     };
   }
 
+  function renderLearning() {
+    const el = $("#learningSummary");
+    if (!el) return;
+    const usage = state.soundUsage || {};
+    const top = Object.entries(usage).sort((a,b)=>b[1]-a[1]).slice(0,3);
+    el.innerHTML = top.length
+      ? top.map(([id,n]) => {
+          const s=sounds.find(x=>x.id===id);
+          return '<div class="learning-row"><span>'+((s&&s.icon)||"🎧")+' '+((s&&s.name)||id)+'</span><strong>'+n+' uses</strong></div>';
+        }).join("")
+      : '<p class="profile-empty">Use a few sounds and sessions and TinniRelief will learn your preferences locally.</p>';
+  }
+
   function renderPatterns() {
     const el = $("#patternList");
     if (!el) return;
@@ -154,8 +167,9 @@
     if (e.target.closest("#reliefStart")) startRelief();
   });
 
-  window.renderReliefEngine = () => { renderRelief(); renderPatterns(); renderProfile(); };
+  window.renderReliefEngine = () => { renderRelief(); renderPatterns(); renderProfile(); renderLearning(); };
   renderRelief();
   renderPatterns();
   renderProfile();
+  renderLearning();
 })();
