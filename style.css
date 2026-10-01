@@ -29,3 +29,4 @@
   .profile-actions{width:100%}
   .profile-actions .secondary{flex:1}
 }
+\n/* V4 guided session phases */\n.phase-head{display:flex;justify-content:space-between;align-items:center;gap:15px;margin:18px 0 10px;padding:13px 15px;background:#091625;border:1px solid #ffffff09;border-radius:14px}.phase-head strong,.phase-head small{display:block}.phase-head strong{font:600 18px "Space Grotesk";margin-top:3px}.phase-head small{color:var(--muted);font-size:11px;margin-top:3px}.phase-head>span{font-size:10px;color:var(--muted)}.phase-track{height:5px;background:#ffffff0b;border-radius:99px;overflow:hidden;margin-bottom:15px}.phase-track span{display:block;height:100%;width:33%;background:var(--accent);border-radius:99px;transition:.4s}\n
