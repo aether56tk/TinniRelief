@@ -6,7 +6,7 @@
     comfortVolume: 35
   };
 
-  let selectedNeed = "moderate";
+  let selectedNeed = state.reliefProfile.goal === "sleep" ? "sleep" : state.reliefProfile.goal === "focus" ? "focus" : "moderate";
 
   const needs = {
     bothered: { title:"A gentler reset", reason:"Start with a low-stimulation sound and a short session. Keep the level comfortable.", sound:"ocean", program:"relax" },
@@ -15,6 +15,31 @@
     sleep: { title:"Wind down", reason:"Choose a low-stimulation nighttime environment and let the session stay in the background.", sound:"night", program:"sleep" },
     focus: { title:"Shift attention", reason:"Use a changing natural environment as a background while you return to your task.", sound:"forest", program:"attention" }
   };
+
+  function renderProfile() {
+    const p = state.reliefProfile;
+    const goal = $("#profileGoal"), mins = $("#profileMinutes"), vol = $("#profileVolume"), out = $("#profileVolumeOut"), box = $("#profileSounds");
+    if (!goal || !mins || !vol || !box) return;
+    goal.value = ["sleep","focus","enrich"].includes(p.goal) ? p.goal : "relax";
+    mins.value = String(p.preferredMinutes || 10);
+    vol.value = Math.round(p.comfortVolume || 35);
+    out.textContent = vol.value + "%";
+    box.innerHTML = sounds.map(s => '<label class="profile-sound"><input type="checkbox" value="' + s.id + '"' + (p.preferredSounds.includes(s.id) ? " checked" : "") + '><span>' + s.icon + " " + s.name + "</span></label>").join("");
+  }
+
+  function saveProfile() {
+    const p = state.reliefProfile;
+    p.goal = $("#profileGoal").value;
+    p.preferredMinutes = +$("#profileMinutes").value;
+    p.comfortVolume = +$("#profileVolume").value;
+    p.preferredSounds = [...document.querySelectorAll("#profileSounds input:checked")].map(x => x.value).slice(0,8);
+    if (master) master.gain.value = p.comfortVolume / 100;
+    $("#masterVolume").value = p.comfortVolume;
+    selectedNeed = p.goal === "sleep" ? "sleep" : p.goal === "focus" ? "focus" : p.goal === "enrich" ? "moderate" : "bothered";
+    save();
+    renderRelief();
+    toast("Relief profile saved");
+  }
 
   function chooseSound(preferred) {
     const fav = state.reliefProfile.preferredSounds || [];
@@ -69,7 +94,7 @@
     const n = needs[selectedNeed];
     const sound = chooseSound(n.sound);
     state.reliefProfile.goal = selectedNeed;
-    state.reliefProfile.preferredMinutes = selectedNeed === "sleep" ? 30 : selectedNeed === "focus" ? 8 : 10;
+    state.reliefProfile.preferredMinutes = state.reliefProfile.preferredMinutes || (selectedNeed === "sleep" ? 30 : selectedNeed === "focus" ? 8 : 10);
     state.reliefProfile.lastRecommendation = { need:selectedNeed, sound, program:n.program, date:today() };
     save();
     track("sessionsStarted");
@@ -93,6 +118,9 @@
     toast("Personal suggestion ready");
   }
 
+  $("#profileVolume")?.addEventListener("input", e => $("#profileVolumeOut").textContent = e.target.value + "%");
+  $("#saveProfile")?.addEventListener("click", saveProfile);
+
   document.addEventListener("click", e => {
     const b = e.target.closest("[data-relief]");
     if (b) {
@@ -103,7 +131,8 @@
     if (e.target.closest("#reliefStart")) startRelief();
   });
 
-  window.renderReliefEngine = () => { renderRelief(); renderPatterns(); };
+  window.renderReliefEngine = () => { renderRelief(); renderPatterns(); renderProfile(); };
   renderRelief();
   renderPatterns();
+  renderProfile();
 })();
