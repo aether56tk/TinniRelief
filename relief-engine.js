@@ -85,13 +85,23 @@
     const el = $("#learningSummary");
     if (!el) return;
     const usage = state.soundUsage || {};
+    const feedback = state.sessionFeedback || [];
     const top = Object.entries(usage).sort((a,b)=>b[1]-a[1]).slice(0,3);
-    el.innerHTML = top.length
+    const comfortable = feedback.filter(x=>x.rating==="comfortable").length;
+    const neutral = feedback.filter(x=>x.rating==="neutral").length;
+    const uncomfortable = feedback.filter(x=>x.rating==="uncomfortable").length;
+    const total = comfortable + neutral + uncomfortable;
+    const last = state.reliefProfile.lastRecommendation;
+    const recommendation = last ? ((sounds.find(s=>s.id===last.sound)||{}).name || last.sound) : "your saved preferences";
+    el.innerHTML = (top.length
       ? top.map(([id,n]) => {
           const s=sounds.find(x=>x.id===id);
           return '<div class="learning-row"><span>'+((s&&s.icon)||"🎧")+' '+((s&&s.name)||id)+'</span><strong>'+n+' uses</strong></div>';
         }).join("")
-      : '<p class="profile-empty">Use a few sounds and sessions and TinniRelief will learn your preferences locally.</p>';
+      : '<p class="profile-empty">Use a few sounds and sessions and TinniRelief will learn your preferences locally.</p>')
+      + '<div class="learning-insight"><strong>Why suggestions change</strong><p>Suggestions combine saved preferences, repeated use, and optional comfort feedback. No clinical outcome is inferred.</p>'
+      + (total ? '<small>Feedback: '+comfortable+' comfortable · '+neutral+' neutral · '+uncomfortable+' uncomfortable</small>' : '<small>No session feedback yet.</small>')
+      + '<small>Last suggested sound: '+recommendation+'</small></div>';
   }
 
   function renderPatterns() {
