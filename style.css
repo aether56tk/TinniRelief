@@ -41,3 +41,6 @@
 
 /* V7 session reflection */
 .session-feedback{margin-top:14px}.feedback-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.feedback-actions button{background:#0d1b2a;border:1px solid #ffffff12;color:var(--text);border-radius:10px;padding:12px 8px;cursor:pointer;font-size:11px}.feedback-actions button:hover{border-color:var(--accent)}@media(max-width:560px){.feedback-actions{grid-template-columns:1fr}}
+
+/* V8 recommendation insights */
+.learning-insight{margin-top:12px;padding:11px 12px;background:#091625;border:1px solid #ffffff08;border-radius:10px}.learning-insight strong{font-size:11px}.learning-insight p{font-size:10px;color:var(--muted);margin:5px 0 8px;line-height:1.5}.learning-insight small{display:block;color:var(--muted);font-size:9px;margin-top:4px}
