@@ -41,9 +41,30 @@
     toast("Relief profile saved");
   }
 
+  function learnSound(id) {
+    state.soundUsage = state.soundUsage || {};
+    state.soundUsage[id] = (state.soundUsage[id] || 0) + 1;
+    save();
+  }
+
+  function learnProgram(id) {
+    state.programUsage = state.programUsage || {};
+    state.programUsage[id] = (state.programUsage[id] || 0) + 1;
+    save();
+  }
+
+  function learnedSound(preferred) {
+    const usage = state.soundUsage || {};
+    const preferredIds = state.reliefProfile.preferredSounds || [];
+    const scored = sounds.map(s => ({
+      id: s.id,
+      score: (usage[s.id] || 0) + (preferredIds.includes(s.id) ? 3 : 0) + (s.id === preferred ? 2 : 0)
+    })).sort((a,b) => b.score - a.score);
+    return scored[0]?.id || preferred;
+  }
+
   function chooseSound(preferred) {
-    const fav = state.reliefProfile.preferredSounds || [];
-    return fav.find(id => sounds.some(s => s.id === id)) || preferred;
+    return learnedSound(preferred);
   }
 
   function averages() {
@@ -93,6 +114,8 @@
   function startRelief() {
     const n = needs[selectedNeed];
     const sound = chooseSound(n.sound);
+    learnSound(sound);
+    learnProgram(n.program);
     state.reliefProfile.goal = selectedNeed;
     state.reliefProfile.preferredMinutes = state.reliefProfile.preferredMinutes || (selectedNeed === "sleep" ? 30 : selectedNeed === "focus" ? 8 : 10);
     state.reliefProfile.lastRecommendation = { need:selectedNeed, sound, program:n.program, date:today() };
