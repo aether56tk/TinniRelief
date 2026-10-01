@@ -1,0 +1,14 @@
+{
+  "name": "TinniRelief — Sound Rehabilitation",
+  "short_name": "TinniRelief",
+  "description": "A local-first sound rehabilitation and tinnitus management companion.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#07111f",
+  "theme_color": "#07111f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
