@@ -55,10 +55,11 @@
 
   function learnedSound(preferred) {
     const usage = state.soundUsage || {};
+    const feedback = state.sessionFeedback || [];
     const preferredIds = state.reliefProfile.preferredSounds || [];
     const scored = sounds.map(s => ({
       id: s.id,
-      score: (usage[s.id] || 0) + (preferredIds.includes(s.id) ? 3 : 0) + (s.id === preferred ? 2 : 0)
+      score: (usage[s.id] || 0) + (preferredIds.includes(s.id) ? 3 : 0) + (s.id === preferred ? 2 : 0) + feedback.filter(x=>x.sound===s.id && x.rating==="comfortable").length * 2 - feedback.filter(x=>x.sound===s.id && x.rating==="uncomfortable").length * 3
     })).sort((a,b) => b.score - a.score);
     return scored[0]?.id || preferred;
   }
