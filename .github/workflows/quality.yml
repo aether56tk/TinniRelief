@@ -1,0 +1,31 @@
+name: TinniRelief Quality
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Syntax check
+        run: |
+          node --check app.js
+          node --check features.js
+          node --check personalization.js
+          node --check pwa.js
+          node --check relief-engine.js
+          node --check sessions.js
+          node --check sw.js
+      - name: Smoke tests
+        run: npm test
