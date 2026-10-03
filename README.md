@@ -22,6 +22,13 @@ Browser-based tinnitus management and sound rehabilitation platform.
 
 See [`VALIDATION_STATUS.md`](VALIDATION_STATUS.md) for the current evidence boundary.
 
+## Project files
+
+- [Security policy](SECURITY.md)
+- [Contributing guide](CONTRIBUTING.md)
+- [Validation status](VALIDATION_STATUS.md)
+- [Citation metadata](CITATION.cff)
+
 ## Run
 Open index.html in a modern browser, or deploy the repository to GitHub Pages.
 
