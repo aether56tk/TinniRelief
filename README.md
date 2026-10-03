@@ -15,6 +15,13 @@ Browser-based tinnitus management and sound rehabilitation platform.
 - No PTA or audiogram module
 - No external audio API required for the initial release
 
+## Research portability
+- Local JSON backup/import for the complete browser workspace
+- Long-format CSV export for diary, session-reflection and soundscape records
+- Exported records are user-generated/self-management data and are not clinical outcome measurements
+
+See [`VALIDATION_STATUS.md`](VALIDATION_STATUS.md) for the current evidence boundary.
+
 ## Run
 Open index.html in a modern browser, or deploy the repository to GitHub Pages.
 
