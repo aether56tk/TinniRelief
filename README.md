@@ -1,3 +1,5 @@
+![Quality](https://github.com/aether56tk/TinniRelief/actions/workflows/quality.yml/badge.svg)
+
 # TinniRelief
 
 Browser-based tinnitus management and sound rehabilitation platform.
