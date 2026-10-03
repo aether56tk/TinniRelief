@@ -27,3 +27,39 @@ presetUI();
 })();
 
 $("#resetUsage")?.addEventListener("click",()=>{if(confirm("Reset feature usage counts?")){state.usage={soundPlays:0,mixerUses:0,sessionsStarted:0,sessionsCompleted:0,checkins:0,breathing:0,sleepTimers:0,presets:0,exports:0,imports:0};save();renderUsage();toast("Usage counts reset")}});
+
+
+function csvCell(value){
+  const s=String(value ?? "");
+  return '"' + s.replace(/"/g,'""') + '"';
+}
+function downloadCsv(rows){
+  const header=["record_type","date","metric","value","context","note"];
+  const body=[header,...rows.map(r=>header.map(k=>csvCell(r[k])))]
+    .map(row=>row.join(",")).join("\n");
+  const blob=new Blob([body+"\n"],{type:"text/csv;charset=utf-8"});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(blob);
+  a.download="tinnirelief-research-export-"+today()+".csv";
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+$("#exportCsv")?.addEventListener("click",()=>{
+  const rows=[];
+  (state.logs||[]).forEach(l=>{
+    for(const [metric,key] of [["intensity","intensity"],["annoyance","annoy"],["sleep","sleep"],["stress","stress"]]){
+      rows.push({record_type:"checkin",date:l.date,metric,value:l[key],context:"diary",note:l.note||""});
+    }
+  });
+  (state.sessionFeedback||[]).forEach(s=>{
+    rows.push({record_type:"session",date:s.date,metric:"rating",value:s.rating,context:s.title||s.program||"",note:s.note||""});
+    rows.push({record_type:"session",date:s.date,metric:"duration_seconds",value:s.duration||0,context:s.sound||"",note:""});
+  });
+  (state.mixes||[]).forEach(m=>{
+    rows.push({record_type:"soundscape",date:"",metric:"layers",value:(m.layers||[]).length,context:m.name||"",note:(m.layers||[]).join("|")});
+  });
+  if(!rows.length){toast("No local data to export");return}
+  track("exports");
+  downloadCsv(rows);
+  toast("Research CSV exported");
+});
