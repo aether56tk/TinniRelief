@@ -147,6 +147,20 @@
       </section>
 
       <section class="card">
+        <div class="card-title"><span>Audiogram history & comparison</span><span>Descriptive</span></div>
+        <div class="research-form audiogram-history-controls">
+          <label>Participant code<select id="agHistoryParticipant"><option value="">Select participant</option></select></label>
+          <label>Baseline<select id="agHistoryBaseline"><option value="">Select baseline</option></select></label>
+          <label>Follow-up<select id="agHistoryFollowup"><option value="">Select follow-up</option></select></label>
+        </div>
+        <div id="audiogramHistoryTable"></div>
+        <div id="audiogramComparison" class="audiogram-comparison">
+          <p class="profile-empty">Select a participant and two audiograms to compare threshold values.</p>
+        </div>
+        <p class="research-disclaimer">Differences are arithmetic threshold changes only. They are not interpreted as clinical improvement, deterioration, or treatment effect.</p>
+      </section>
+
+      <section class="card">
         <div class="card-title"><span>Participant / visit record</span><span>De-identified</span></div>
         <div class="research-form">
           <label>Participant code<input id="researchParticipant" placeholder="P-001" maxlength="30"></label>
@@ -224,6 +238,62 @@
     return db.audiograms.slice().sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt))).pop() || null;
   }
 
+  function participantAudiograms(participant) {
+    return db.audiograms
+      .filter(a => a.participant === participant)
+      .slice()
+      .sort((a,b) => String(a.date).localeCompare(String(b.date)) || String(a.createdAt).localeCompare(String(b.createdAt)));
+  }
+
+  function renderComparison(base, follow) {
+    if (!base || !follow) return '<p class="profile-empty">Select a baseline and follow-up audiogram to compare thresholds.</p>';
+    const rows = FREQS.map(f => {
+      const r0 = nOrNull(base.acRight?.[f]), r1 = nOrNull(follow.acRight?.[f]);
+      const l0 = nOrNull(base.acLeft?.[f]), l1 = nOrNull(follow.acLeft?.[f]);
+      const fmt = (a,b) => a === null || b === null ? "—" : (b-a > 0 ? "+" : "") + (b-a) + " dB";
+      return `<tr><td>${f >= 1000 ? (f/1000)+"k" : f}</td><td>${r0 ?? "—"}</td><td>${r1 ?? "—"}</td><td>${fmt(r0,r1)}</td><td>${l0 ?? "—"}</td><td>${l1 ?? "—"}</td><td>${fmt(l0,l1)}</td></tr>`;
+    }).join("");
+    return `
+      <div class="comparison-meta"><strong>${esc(base.participant)}</strong><span>${esc(base.date)} · ${esc(base.visit)} → ${esc(follow.date)} · ${esc(follow.visit)}</span></div>
+      <div class="comparison-table-wrap"><table class="comparison-table">
+        <thead><tr><th>Freq.</th><th>R AC base</th><th>R AC follow</th><th>R Δ</th><th>L AC base</th><th>L AC follow</th><th>L Δ</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table></div>
+      <div class="comparison-note">Positive Δ = higher threshold at follow-up; negative Δ = lower threshold. Blank values mean the threshold was not recorded.</div>`;
+  }
+
+  function renderAudiogramHistory() {
+    const select = document.querySelector("#agHistoryParticipant");
+    const baseSelect = document.querySelector("#agHistoryBaseline");
+    const followSelect = document.querySelector("#agHistoryFollowup");
+    const table = document.querySelector("#audiogramHistoryTable");
+    const comparison = document.querySelector("#audiogramComparison");
+    if (!select || !baseSelect || !followSelect) return;
+
+    const participants = [...new Set(db.audiograms.map(a=>a.participant))].sort();
+    const current = select.value;
+    select.innerHTML = '<option value="">Select participant</option>' + participants.map(id=>`<option value="${esc(id)}">${esc(id)}</option>`).join("");
+    if (participants.includes(current)) select.value=current;
+
+    const list = participantAudiograms(select.value);
+    baseSelect.innerHTML = '<option value="">Select baseline</option>' + list.map((a,i)=>`<option value="${i}">${esc(a.date)} · ${esc(a.visit)}</option>`).join("");
+    followSelect.innerHTML = '<option value="">Select follow-up</option>' + list.map((a,i)=>`<option value="${i}">${esc(a.date)} · ${esc(a.visit)}</option>`).join("");
+
+    const oldBase = baseSelect.dataset.selected, oldFollow = followSelect.dataset.selected;
+    if (oldBase !== undefined && list[Number(oldBase)]) baseSelect.value=oldBase;
+    if (oldFollow !== undefined && list[Number(oldFollow)]) followSelect.value=oldFollow;
+
+    table.innerHTML = list.length ? `
+      <div class="research-history-list">${list.map((a,i)=>`
+        <button class="history-audiogram-row" data-audio-index="${i}">
+          <span><strong>${esc(a.date)}</strong><small>${esc(a.visit)} · ${esc(a.transducer || "transducer not recorded")}</small></span>
+          <span>${esc(a.note || "No note")}</span>
+        </button>`).join("")}</div>` : '<p class="profile-empty">No audiograms stored for this participant.</p>';
+
+    const b = list[Number(baseSelect.value)], f = list[Number(followSelect.value)];
+    comparison.innerHTML = b && f ? renderComparison(b,f) : '<p class="profile-empty">Select a baseline and follow-up audiogram to compare threshold values.</p>';
+  }
+
   function render() {
     const p=page();
     p.querySelector("#researchStudyId").value=db.studyId;
@@ -264,6 +334,7 @@
       status.textContent="No record selected";
       legend.innerHTML="";
     }
+    renderAudiogramHistory();
   }
 
   function exportCsv(){
@@ -358,6 +429,22 @@
     if(e.target.closest("#clearAudiogram")){
       clearInputs(["agParticipant","agTransducer","agNote",...FREQS.flatMap(f=>["agRAC"+f,"agLAC"+f]),...BC_FREQS.flatMap(f=>["agRBC"+f,"agLBC"+f])]);
       toast("Audiogram fields cleared");
+    }
+    if(e.target.closest("#agHistoryParticipant") || e.target.closest("#agHistoryBaseline") || e.target.closest("#agHistoryFollowup")){
+      const el=e.target.closest("select");
+      if(el) el.dataset.selected=el.value;
+      renderAudiogramHistory();
+    }
+    const historyRow=e.target.closest("[data-audio-index]");
+    if(historyRow){
+      const participant=val("#agHistoryParticipant");
+      const list=participantAudiograms(participant);
+      const a=list[Number(historyRow.dataset.audioIndex)];
+      if(a){
+        document.querySelector("#audiogramPlot").innerHTML=renderAudiogramSvg(a);
+        document.querySelector("#audiogramStatus").textContent=`${a.participant} · ${a.visit} · ${a.date}`;
+        document.querySelector("#audiogramLegend").innerHTML='<span>○ Right AC</span><span>× Left AC</span><span>&lt; Right BC</span><span>&gt; Left BC</span><span>History selection</span>';
+      }
     }
     if(e.target.closest("#researchExport"))exportCsv();
     if(e.target.closest("#researchClear")){
