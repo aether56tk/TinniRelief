@@ -11,7 +11,7 @@
         studyId: x.studyId || "TINNI-LOCAL",
         protocolVersion: x.protocolVersion || "0.1",
         participants: Array.isArray(x.participants) ? x.participants : [],
-        visits: Array.isArray(x.visits) ? x.visits : []
+        visits: Array.isArray(x.visits) ? x.visits : [],\n        baselines: Array.isArray(x.baselines) ? x.baselines : []
       };
     } catch { return {studyId:"TINNI-LOCAL",protocolVersion:"0.1",participants:[],visits:[]}; }
   };
@@ -52,6 +52,28 @@
         </section>
       </div>
       <section class="card research-form-card">
+        <div class="card-title"><span>Audiological baseline</span><span>Optional · Research only</span></div>
+        <p class="profile-help">Enter measurements only when they are available from a documented audiological assessment. Do not use this section to diagnose a user.</p>
+        <div class="research-form">
+          <label>Participant code<input id="audioParticipant" placeholder="P-001" maxlength="30"></label>
+          <label>Assessment date<input id="audioDate" type="date"></label>
+          <label>Tinnitus laterality<select id="audioLaterality"><option>Not recorded</option><option>Right</option><option>Left</option><option>Bilateral</option><option>Central/other</option></select></label>
+          <label>Tinnitus duration<select id="audioDuration"><option>Not recorded</option><option>&lt; 3 months</option><option>3–6 months</option><option>6–12 months</option><option>&gt; 1 year</option><option>&gt; 5 years</option></select></label>
+          <label>Tinnitus character<select id="audioCharacter"><option>Not recorded</option><option>Tonality</option><option>Noise-like</option><option>Mixed/other</option></select></label>
+          <label>PTA right (dB HL)<input id="ptaRight" type="number" min="-10" max="130" step="0.1" placeholder="—"></label>
+          <label>PTA left (dB HL)<input id="ptaLeft" type="number" min="-10" max="130" step="0.1" placeholder="—"></label>
+          <label>Speech score right (%)<input id="speechRight" type="number" min="0" max="100" step="1" placeholder="—"></label>
+          <label>Speech score left (%)<input id="speechLeft" type="number" min="0" max="100" step="1" placeholder="—"></label>
+          <label>Tympanometry right<select id="tympRight"><option>Not recorded</option><option>Type A</option><option>Type As</option><option>Type Ad</option><option>Type B</option><option>Type C</option><option>Other</option></select></label>
+          <label>Tympanometry left<select id="tympLeft"><option>Not recorded</option><option>Type A</option><option>Type As</option><option>Type Ad</option><option>Type B</option><option>Type C</option><option>Other</option></select></label>
+          <label>OAE status<select id="oae"><option>Not recorded</option><option>Present</option><option>Absent</option><option>Partial/other</option></select></label>
+          <label>ABR status<select id="abr"><option>Not recorded</option><option>Within expected limits</option><option>Abnormal</option><option>Not completed</option></select></label>
+          <label>Hearing-aid use<select id="haUse"><option>None</option><option>Current</option><option>Previous</option><option>Unknown</option></select></label>
+          <label>Assessment source<input id="audioSource" placeholder="e.g. clinic assessment" maxlength="80"></label>
+        </div>
+        <label class="research-label">Audiological note<textarea id="audioNote" rows="3" placeholder="Protocol-relevant assessment note; avoid names or direct identifiers."></textarea></label>
+        <button class="primary" id="saveAudiologicalBaseline">Save audiological baseline</button>
+      </section>
         <div class="card-title"><span>Participant / visit record</span><span>De-identified</span></div>
         <div class="research-form">
           <label>Participant code<input id="researchParticipant" placeholder="P-001" maxlength="30"></label>
@@ -134,6 +156,18 @@
       db.visits.push(v); save();
       ["researchParticipant","researchIntensity","researchAnnoyance","researchSleep","researchStress","researchMinutes","researchNote"].forEach(id=>{const x=document.querySelector("#"+id);if(x)x.value=""});
       render(); toast("Research record saved locally");
+    }
+    if(e.target.closest("#saveAudiologicalBaseline")){
+      const participant=val("#audioParticipant").toUpperCase();
+      if(!participant){toast("Enter a participant code");return;}
+      const date=val("#audioDate")||new Date().toISOString().slice(0,10);
+      const v={participant,date,laterality:val("#audioLaterality"),duration:val("#audioDuration"),character:val("#audioCharacter"),
+        ptaRight:num("#ptaRight"),ptaLeft:num("#ptaLeft"),speechRight:num("#speechRight"),speechLeft:num("#speechLeft"),
+        tympRight:val("#tympRight"),tympLeft:val("#tympLeft"),oae:val("#oae"),abr:val("#abr"),haUse:val("#haUse"),
+        source:val("#audioSource"),note:val("#audioNote"),status:"completed",software:"TinniRelief/"+db.protocolVersion,createdAt:new Date().toISOString()};
+      db.baselines.push(v);save();
+      ["audioParticipant","ptaRight","ptaLeft","speechRight","speechLeft","audioSource","audioNote"].forEach(id=>{const x=document.querySelector("#"+id);if(x)x.value=""});
+      render();toast("Audiological baseline saved locally");
     }
     if(e.target.closest("#researchExport")) exportCsv();
     if(e.target.closest("#researchClear")){if(confirm("Delete the local research workspace?")){db={studyId:"TINNI-LOCAL",protocolVersion:"0.1",participants:[],visits:[]};save();render();toast("Research workspace cleared")}}
