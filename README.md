@@ -20,6 +20,8 @@ Browser-based tinnitus management and sound rehabilitation platform.
 ## Research portability
 - Local JSON backup/import for the complete browser workspace
 - Long-format CSV export for diary, session-reflection and soundscape records
+- Local research workspace with de-identified participant codes, protocol metadata, baseline/intervention/follow-up records, descriptive change summaries and research CSV export
+- Research records remain separate from the normal self-management workspace and do not claim clinical efficacy
 - Exported records are user-generated/self-management data and are not clinical outcome measurements
 
 See [`VALIDATION_STATUS.md`](VALIDATION_STATUS.md) for the current evidence boundary.
