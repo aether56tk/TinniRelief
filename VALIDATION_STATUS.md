@@ -49,3 +49,9 @@ The research workspace now supports an optional, de-identified audiological base
 The research workspace now supports structured audiogram entry for de-identified participants. Air-conduction thresholds can be entered at 250–8000 Hz for both ears and bone-conduction thresholds at 250–4000 Hz, with an assessment date, visit label, transducer, and research note. Saved records are plotted in a conventional dB HL audiogram view and included in the research CSV export.
 
 The visualization is a data-entry/education aid only. Thresholds are manually entered; the application does not perform audiometer calibration, masking verification, diagnostic interpretation, or hearing-loss classification.
+
+
+### Audiogram history and comparison
+The research workspace now supports participant-wise audiogram history. Users can select a participant, choose two stored audiograms, review air-conduction thresholds side by side at each recorded frequency, and view arithmetic threshold differences. Selecting a history row also updates the main audiogram plot.
+
+These comparisons are descriptive data summaries only. The application does not label a change as improvement/deterioration, determine clinical significance, or attribute a change to tinnitus intervention.
