@@ -53,3 +53,29 @@
 
 /* V11 audiological baseline */
 .research-form-card .profile-help{margin-bottom:16px}.research-form-card .research-form label{min-width:0}.research-form-card .research-form input,.research-form-card .research-form select{min-height:40px}.research-form-card .primary{margin-top:4px}
+
+
+/* V12 structured audiogram */
+.audiogram-entry-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:8px 0 16px}
+.audiogram-ear-card{background:#091625;border:1px solid #ffffff09;border-radius:14px;padding:14px}
+.audiogram-ear-card .card-title{margin-bottom:12px}
+.threshold-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.threshold-grid label{color:var(--muted);font-size:9px}
+.threshold-grid input{display:block;width:100%;box-sizing:border-box;margin-top:5px;background:#0b1a2b;border:1px solid var(--line);border-radius:8px;color:var(--text);padding:9px;font:inherit;font-size:11px}
+.audiogram-actions{display:flex;gap:8px;flex-wrap:wrap}
+.audiogram-plot-wrap{width:100%;overflow:auto;background:#091625;border:1px solid #ffffff09;border-radius:14px;padding:10px;box-sizing:border-box}
+.audiogram-plot-wrap svg{display:block;width:100%;min-width:680px;height:auto}
+.audiogram-plot-wrap .ag-bg{fill:#091625;stroke:#ffffff18}
+.audiogram-plot-wrap .ag-grid{stroke:#ffffff14;stroke-width:1}
+.audiogram-plot-wrap .ag-label{fill:var(--muted);font:11px "DM Sans",sans-serif}
+.audiogram-plot-wrap .ag-axis{fill:var(--text);font:600 12px "DM Sans",sans-serif}
+.audiogram-plot-wrap .ag-center{text-anchor:middle}
+.audiogram-plot-wrap .ag-right{text-anchor:end}
+.audiogram-plot-wrap .ag-rotate{transform:rotate(-90deg);transform-origin:18px 235px}
+.audiogram-plot-wrap .ag-right-line{stroke:var(--accent);fill:none;stroke-width:2}
+.audiogram-plot-wrap .ag-left-line{stroke:#f3a8c5;fill:none;stroke-width:2}
+.audiogram-plot-wrap .ag-right-mark{stroke:var(--accent);fill:none;stroke-width:2.2}
+.audiogram-plot-wrap .ag-left-mark{stroke:#f3a8c5;fill:none;stroke-width:2.2}
+.audiogram-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:10px}
+.audiogram-legend span{padding:6px 8px;border:1px solid #ffffff09;border-radius:9px;background:#091625}
+@media(max-width:700px){.audiogram-entry-grid{grid-template-columns:1fr}.threshold-grid{grid-template-columns:repeat(2,1fr)}.audiogram-actions{flex-direction:column}.audiogram-actions button{width:100%}}
