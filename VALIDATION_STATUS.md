@@ -20,6 +20,12 @@ TinniRelief has not been validated as a treatment for tinnitus, nor has the soft
 
 Usage counts, comfort ratings, diary scores, and session reflections are **user-reported/self-management data**, not clinical outcome measures.
 
+## Research workspace
+
+The repository now includes a local research workspace for structured, de-identified record keeping. It stores a study ID, protocol version, participant code, visit type, self-reported measures, session duration/type, protocol note, software version, and timestamps. It can export a long-format CSV and show descriptive baseline-to-latest intensity changes.
+
+This is a data-management and prototyping feature only. It does not establish treatment efficacy, diagnostic validity, or clinical safety.
+
 ## Future validation
 
 If this project is used for research, define a prospective protocol before collecting participant data:
