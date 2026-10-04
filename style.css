@@ -79,3 +79,31 @@
 .audiogram-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;color:var(--muted);font-size:10px}
 .audiogram-legend span{padding:6px 8px;border:1px solid #ffffff09;border-radius:9px;background:#091625}
 @media(max-width:700px){.audiogram-entry-grid{grid-template-columns:1fr}.threshold-grid{grid-template-columns:repeat(2,1fr)}.audiogram-actions{flex-direction:column}.audiogram-actions button{width:100%}}
+
+
+/* V13 audiogram history + comparison */
+.audiogram-history-controls{margin-bottom:14px}
+.audiogram-history-controls select{min-width:0}
+.research-history-list{display:grid;gap:8px;margin-top:4px}
+.history-audiogram-row{width:100%;display:flex;justify-content:space-between;align-items:center;gap:15px;text-align:left;background:#091625;border:1px solid #ffffff09;color:var(--text);border-radius:12px;padding:11px 13px;cursor:pointer}
+.history-audiogram-row:hover{border-color:var(--accent)}
+.history-audiogram-row span:first-child{min-width:180px}
+.history-audiogram-row strong,.history-audiogram-row small{display:block}
+.history-audiogram-row small{color:var(--muted);font-size:9px;margin-top:3px}
+.history-audiogram-row span:last-child{color:var(--muted);font-size:10px;max-width:55%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.audiogram-comparison{margin-top:15px}
+.comparison-meta{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:10px}
+.comparison-meta strong{font:600 16px "Space Grotesk"}
+.comparison-meta span{color:var(--muted);font-size:10px}
+.comparison-table-wrap{overflow:auto;border:1px solid #ffffff09;border-radius:12px}
+.comparison-table{width:100%;border-collapse:collapse;min-width:680px;font-size:10px}
+.comparison-table th,.comparison-table td{padding:9px 10px;border-bottom:1px solid #ffffff08;text-align:center}
+.comparison-table th{color:var(--muted);font-weight:600;background:#091625}
+.comparison-table td:first-child,.comparison-table th:first-child{text-align:left}
+.comparison-table tr:last-child td{border-bottom:0}
+.comparison-note{color:var(--muted);font-size:9px;line-height:1.5;margin-top:10px}
+@media(max-width:560px){
+  .history-audiogram-row{align-items:flex-start;flex-direction:column}
+  .history-audiogram-row span:first-child,.history-audiogram-row span:last-child{max-width:100%;min-width:0;width:100%}
+  .comparison-meta{align-items:flex-start;flex-direction:column}
+}
