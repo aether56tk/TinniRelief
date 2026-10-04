@@ -401,6 +401,18 @@
     db.audiograms.push(v);save();render();toast("Audiogram saved and plotted");
   }
 
+  document.addEventListener("change",e=>{
+    if(e.target.matches("#agHistoryParticipant,#agHistoryBaseline,#agHistoryFollowup")){
+      e.target.dataset.selected=e.target.value;
+      if(e.target.id==="agHistoryParticipant"){
+        const base=document.querySelector("#agHistoryBaseline"), follow=document.querySelector("#agHistoryFollowup");
+        if(base) base.dataset.selected="";
+        if(follow) follow.dataset.selected="";
+      }
+      renderAudiogramHistory();
+    }
+  });
+
   document.addEventListener("click",e=>{
     const nav=e.target.closest('[data-page="research"]');
     if(nav){
