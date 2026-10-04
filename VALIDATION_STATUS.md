@@ -43,3 +43,9 @@ Do not use repository software tests as evidence of clinical efficacy.
 
 ### Audiological baseline module
 The research workspace now supports an optional, de-identified audiological baseline record. Fields include tinnitus laterality/duration/character, PTA by ear, speech score by ear, tympanometry type by ear, OAE/ABR status, hearing-aid use, assessment source, and a protocol note. These fields are descriptive data capture only; the application does not interpret them as a diagnosis or claim treatment efficacy.
+
+
+### Audiogram module
+The research workspace now supports structured audiogram entry for de-identified participants. Air-conduction thresholds can be entered at 250–8000 Hz for both ears and bone-conduction thresholds at 250–4000 Hz, with an assessment date, visit label, transducer, and research note. Saved records are plotted in a conventional dB HL audiogram view and included in the research CSV export.
+
+The visualization is a data-entry/education aid only. Thresholds are manually entered; the application does not perform audiometer calibration, masking verification, diagnostic interpretation, or hearing-loss classification.
