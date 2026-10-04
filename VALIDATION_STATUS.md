@@ -39,3 +39,7 @@ If this project is used for research, define a prospective protocol before colle
 7. Reproducible export and audit trail.
 
 Do not use repository software tests as evidence of clinical efficacy.
+
+
+### Audiological baseline module
+The research workspace now supports an optional, de-identified audiological baseline record. Fields include tinnitus laterality/duration/character, PTA by ear, speech score by ear, tympanometry type by ear, OAE/ABR status, hearing-aid use, assessment source, and a protocol note. These fields are descriptive data capture only; the application does not interpret them as a diagnosis or claim treatment efficacy.
