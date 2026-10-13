@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import fs from "node:fs";
 import test from "node:test";
+import { spawnSync } from "node:child_process";
 
 const required = [
   "index.html",
@@ -42,7 +43,9 @@ test("browser JavaScript parses", () => {
     "sessions.js",
     "sw.js"
   ]) {
-    const source = fs.readFileSync(file, "utf8");
-    assert.ok(source.length > 0, file);
+    const result = spawnSync(process.execPath, ["--check", file], {
+      encoding: "utf8"
+    });
+    assert.equal(result.status, 0, `${file} failed syntax check:\n${result.stderr}`);
   }
 });
